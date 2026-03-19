@@ -1,0 +1,42 @@
+services:
+  server1:
+    build: .
+    container_name: server1
+    command: ["python", "server.py", "server1"]
+    networks:
+      appnet:
+        aliases:
+          - server
+
+  server2:
+    build: .
+    container_name: server2
+    command: ["python", "server.py", "server2"]
+    networks:
+      appnet:
+        aliases:
+          - server
+
+  server3:
+    build: .
+    container_name: server3
+    command: ["python", "server.py", "server3"]
+    networks:
+      appnet:
+        aliases:
+          - server
+
+  client:
+    build: .
+    container_name: client
+    command: ["python", "client.py"]
+    depends_on:
+      - server1
+      - server2
+      - server3
+    networks:
+      - appnet
+
+networks:
+  appnet:
+    driver: bridge
