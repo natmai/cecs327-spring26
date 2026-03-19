@@ -1,0 +1,38 @@
+services:
+  receiver1:
+    build: .
+    container_name: receiver1
+    command: ["python", "multicast_receiver.py", "--duration", "20"]
+    networks:
+      - mcastnet
+
+  receiver2:
+    build: .
+    container_name: receiver2
+    command: ["python", "multicast_receiver.py", "--duration", "20"]
+    networks:
+      - mcastnet
+
+  sender1:
+    build: .
+    container_name: sender1
+    command: ["python", "multicast_sender.py", "temp"]
+    depends_on:
+      - receiver1
+      - receiver2
+    networks:
+      - mcastnet
+
+  sender2:
+    build: .
+    container_name: sender2
+    command: ["python", "multicast_sender.py", "humidity"]
+    depends_on:
+      - receiver1
+      - receiver2
+    networks:
+      - mcastnet
+
+networks:
+  mcastnet:
+    driver: bridge
