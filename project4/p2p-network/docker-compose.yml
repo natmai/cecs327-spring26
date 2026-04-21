@@ -1,0 +1,44 @@
+version: "3"
+services:
+  node1:
+    build: .
+    container_name: node1
+    ports:
+      - "5001:5000"
+    environment:
+      - NODE_NAME=node1
+      - PEERS=http://node2:5000,http://node3:5000
+    volumes:
+      - ./storage1:/app/storage
+    networks:
+      - project3_p2p-net
+
+  node2:
+    build: .
+    container_name: node2
+    ports:
+      - "5002:5000"
+    environment:
+      - NODE_NAME=node2
+      - PEERS=http://node1:5000,http://node3:5000
+    volumes:
+      - ./storage2:/app/storage
+    networks:
+      - project3_p2p-net
+
+  node3:
+    build: .
+    container_name: node3
+    ports:
+      - "5003:5000"
+    environment:
+      - NODE_NAME=node3
+      - PEERS=http://node1:5000,http://node2:5000
+    volumes:
+      - ./storage3:/app/storage
+    networks:
+      - project3_p2p-net
+
+networks:
+  project3_p2p-net:
+    driver: bridge
